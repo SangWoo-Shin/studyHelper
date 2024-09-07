@@ -1,6 +1,6 @@
 import { Button, Form } from 'react-bootstrap';
 import { useAtom } from 'jotai';
-import { emailAtom } from './emailAtom';
+import { emailAtom } from './atom';
 import { useState } from 'react';
 import { setToken, setEmailLocal } from '@/lib/storingUser';
 import { useRouter } from 'next/router';
@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 export default function Otp() {
   const router = useRouter();
   const [otp, setOtp] = useState('');
-  
   const [email, setEmail] = useAtom(emailAtom);
   async function handleSubmit(e) {
     e.preventDefault();
@@ -19,7 +18,7 @@ export default function Otp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email , otp }),
+        body: JSON.stringify({ email, otp, password }),
       });
   
       const data = await response.json();
@@ -36,7 +35,7 @@ export default function Otp() {
         setEmailLocal(data2.email);
         localStorage.setItem('userId', data.user._id);
         if(data.exists) {
-          router.push('/');
+          router.push('/user/login');
         } else {
           router.push('/profile/create');
         }

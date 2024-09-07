@@ -1,22 +1,36 @@
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react";
+import LoginPage from '../pages/user/login';
+import styles from "../styles/home.module.css";  // Assuming this stylesheet exists
 
-const MyComponent = () => {
-  const { data: session } = useSession()
+export default function Home() {
+  const { data: session, status } = useSession();
 
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user.email} <br/>
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
+  const handleSignOut = async () => {
+    const result = await signOut({ callbackUrl: "/user/login", redirect: false });
+    if (!result?.url) {
+      console.error("Sign-out redirection failed");
+    }
+  };
+
+  if (status === "loading") {
+    return <p>Loading...</p>; // Handle loading state
   }
+
   return (
     <>
-      Not signed in <br/>
-      <button onClick={() => signIn()}>Sign in</button>
+      {session ? (
+        <div className={styles.container}>
+          <p>Welcome, {session.user.name}!</p>
+          <button
+            className={styles.signOutButton}
+            onClick={() => handleSignOut()}
+          >
+            Sign Out
+          </button>
+        </div>
+      ) : (
+        <LoginPage/>
+      )}
     </>
-  )
+  );
 }
-
-export default MyComponent
