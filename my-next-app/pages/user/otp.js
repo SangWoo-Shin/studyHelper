@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { setToken, setEmailLocal } from '@/lib/storingUser';
 import { useRouter } from 'next/router';
 
-export default function Otp() {
+const Otp = () => {
   const router = useRouter();
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useAtom(emailAtom);
@@ -68,3 +68,5 @@ export default function Otp() {
     </>
   );
 }
+
+export default Otp;
