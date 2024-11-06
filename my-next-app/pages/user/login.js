@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import OtpVerify from '../../components/otpVerify';
 import style from '../../styles/loginPage.module.css';
-import { emailAtom, passwordAtom, nameAtom } from './atom';
+import { emailAtom, passwordAtom, nameAtom } from '../../lib/atom';
 import { useAtom } from 'jotai';
 import { Image } from 'react-bootstrap';
 
