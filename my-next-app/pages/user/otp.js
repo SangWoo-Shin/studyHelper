@@ -1,6 +1,6 @@
 import { Button, Form } from 'react-bootstrap';
 import { useAtom } from 'jotai';
-import { emailAtom } from './atom';
+import { emailAtom } from '../../lib/atom';
 import { useState } from 'react';
 import { setToken, setEmailLocal } from '@/lib/storingUser';
 import { useRouter } from 'next/router';
