@@ -2,7 +2,7 @@ import { useSession, signOut } from "next-auth/react";
 import LoginPage from '../pages/user/login';
 import styles from "../styles/home.module.css";  // Assuming this stylesheet exists
 
-export default function Home() {
+ const Home = () => {
   const { data: session, status } = useSession();
 
   const handleSignOut = async () => {
@@ -34,3 +34,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;
