@@ -15,7 +15,7 @@ const OtpVerify = ({ show, onHide }) => {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL+'/verify/otp', {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKENDURL+'/verify/otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ const OtpVerify = ({ show, onHide }) => {
             const data = await response.json();
             if (response.status == 200) {
                 setToken(data.token);
-                const res = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL+'/getUser', {
+                const res = await fetch(process.env.NEXT_PUBLIC_BACKENDURL+'/getUser', {
                     method: 'GET',
                     headers: {
                         Authorization: `JWT ${data.token}`,
