@@ -5,6 +5,7 @@ import OtpVerify from '../../components/otpVerify';
 import style from '../../styles/loginPage.module.css';
 import { emailAtom, passwordAtom, nameAtom } from './atom';
 import { useAtom } from 'jotai';
+import { Image } from 'react-bootstrap';
 
 const doCredentailLogin = async (email, password) => {
     try {
@@ -95,13 +96,13 @@ export default function Login() {
               <h1 className={style.h1}>Create Account</h1>
               <section className={style['social-container']}>
                 <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <img src="/facebook-icon.png" alt="facebook" width={18} height={18}></img>
+                  <Image src="/facebook-icon.png" alt="facebook" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <img src="/google-icon.png" alt="google" width={18} height={18}></img>
+                  <Image src="/google-icon.png" alt="google" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <img src="/kakao.png" alt="kakao" width={18} height={18}></img>
+                  <Image src="/kakao.png" alt="kakao" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your email for registration</span>
@@ -117,13 +118,13 @@ export default function Login() {
               <h1 className={style.h1}>Sign in</h1>
               <section className={style['social-container']}>
                 <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <img src="/facebook-icon.png" alt="facebook" width={18} height={18}></img>
+                  <Image src="/facebook-icon.png" alt="facebook" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <img src="/google-icon.png" alt="google" width={18} height={18}></img>
+                  <Image src="/google-icon.png" alt="google" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <img src="/kakao.png" alt="kakao" width={18} height={18}></img>
+                  <Image src="/kakao.png" alt="kakao" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your account</span>
