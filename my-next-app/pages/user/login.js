@@ -44,7 +44,6 @@ export default function Login() {
         if (!!response.error) {
             console.error(response.error);
         } else {
-            console.log('Login successful:', user);
             router.push('/');
         }
     } catch(err) {
@@ -62,7 +61,7 @@ export default function Login() {
         alert("Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
     } else {
         try {
-            const response = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL+'/generate/otp', {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKENDURL+'/generate/otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
