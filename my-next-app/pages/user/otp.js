@@ -13,7 +13,7 @@ export default function Otp() {
     e.preventDefault();
 
     try {
-      const response = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL+'/verify/otp', {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKENDURL+'/verify/otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default function Otp() {
       const data = await response.json();
       if(response.status === 200){
         setToken(data.token);
-        const response2 = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL+'/getUser', {
+        const response2 = await fetch(process.env.NEXT_PUBLIC_BACKENDURL+'/getUser', {
           method: 'GET',
           headers: {
             Authorization: `JWT ${data.token}`,
