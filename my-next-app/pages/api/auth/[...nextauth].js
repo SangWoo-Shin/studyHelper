@@ -18,7 +18,7 @@ const authOptions = {
                 if (credentials === null) return null;
                 console.log(credentials);
 
-                const response = await fetch(processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL + '/verifyUser', {
+                const response = await fetch(process.env.NEXT_PUBLIC_BACKENDURL + '/verifyUser', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,12 +43,12 @@ const authOptions = {
             }
         }),
         GoogleProvider({
-            clientId: processREMOVED_SECRETS.GOOGLE_ID,
-            clientSecret: processREMOVED_SECRETS.GOOGLE_SECRET,
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
         }),
         KakaoProvider({
-            clientId: processREMOVED_SECRETS.KAKAO_ID,
-            clientSecret: processREMOVED_SECRETS.KAKAO_SECRET,
+            clientId: process.env.KAKAO_ID,
+            clientSecret: process.env.KAKAO_SECRET,
             authorization: {
                 url: "https://kauth.kakao.com/oauth/authorize",
                 params: {
@@ -57,11 +57,15 @@ const authOptions = {
             }
         }),
         FacebookProvider({
-            clientId: processREMOVED_SECRETS.FACEBOOK_ID,
-            clientSecret: processREMOVED_SECRETS.FACEBOOK_SECRET
+            clientId: process.env.FACEBOOK_ID,
+            clientSecret: process.env.FACEBOOK_SECRET
         })
     ],
     callbacks: {
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith(baseUrl)) return url;
+            return baseUrl; // Redirect to base URL for all other cases
+        },
         async jwt({ token, user }) {
             if (user) {
               token.id = user.id;
@@ -79,7 +83,7 @@ const authOptions = {
             console.log(account);
             if (account.provider === 'kakao') {
                 try {
-                  const kakaoUserResponse = await fetch(`${processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL}/users/check`, {
+                  const kakaoUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/users/check`, {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -102,7 +106,7 @@ const authOptions = {
                 
             } else if (account.provider === 'google') {    
                 try {
-                const googleUserResponse = await fetch(`${processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL}/users/check`, {
+                const googleUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/users/check`, {
                     method: 'POST', 
                     headers: {
                         'Content-Type': 'application/json',
@@ -125,7 +129,7 @@ const authOptions = {
                 }
             } else if(account.provider == 'facebook') {
                 try {
-                    const facebookUserResponse = await fetch(`${processREMOVED_SECRETS.NEXT_PUBLIC_BACKENDURL}/users/check`, {
+                    const facebookUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/users/check`, {
                         method: 'POST', 
                         headers: {
                             'Content-Type': 'application/json',
@@ -152,7 +156,7 @@ const authOptions = {
         }
     },
     pages: {
-        signOut: '/uer/login', 
+        signOut: '/user/login', 
     },
 };
 
