@@ -95,13 +95,13 @@ const Login = () => {
               <h1 className={style.h1}>Create Account</h1>
               <section className={style['social-container']}>
                 <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <Image src="/facebook-icon.png" width={18} height={18}></Image>
+                  <Image src="/facebook-icon.png" alt="fa" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <Image src="/google-icon.png" width={18} height={18}></Image>
+                  <Image src="/google-icon.png" alt="go" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <Image src="/kakao.png" width={18} height={18}></Image>
+                  <Image src="/kakao.png" alt="ka" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your email for registration</span>
@@ -117,13 +117,13 @@ const Login = () => {
               <h1 className={style.h1}>Sign in</h1>
               <section className={style['social-container']}>
                 <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <Image src="/facebook-icon.png" width={18} height={18}></Image>
+                  <Image src="/facebook-icon.png" alt="fa" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <Image src="/google-icon.png" width={18} height={18}></Image>
+                  <Image src="/google-icon.png" alt="go" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <Image src="/kakao.png" width={18} height={18}></Image>
+                  <Image src="/kakao.png" alt="ka" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your account</span>
