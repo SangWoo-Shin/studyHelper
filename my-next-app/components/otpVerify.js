@@ -2,7 +2,7 @@ import { Modal, Button, Container, Form } from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { setToken, setEmailLocal } from '../lib/storingUser';
 import { useAtom } from 'jotai';
-import { emailAtom, passwordAtom, nameAtom } from '../pages/user/atom';
+import { emailAtom, passwordAtom, nameAtom } from '../lib/atom';
 import { useRouter } from 'next/router';
 import style from '../styles/verfiyModal.module.css';
 
