@@ -7,26 +7,63 @@ import { emailAtom, passwordAtom, nameAtom } from '../../lib/atom';
 import { useAtom } from 'jotai';
 import { Image } from 'react-bootstrap';
 
-const doCredentailLogin = async (email, password) => {
-    try {
-        const response = await signIn("credentials", {
-            email: email,
-            password: password,
-            redirect: false
-        });
-        return response;
-    } catch(err) {
-        throw new Error(err);
-    }
-}
 const Login = () => {
   const { data: session, status } = useSession(); 
   const router = useRouter();
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.email) {
+      router.replace('/');
+    }
+  }, [status]);
+
+  if (status === 'loading') return <p>Loading...</p>; 
+
+  if (status === "authenticated" && session?.user?.email) {
+    return <p>Redirecting...</p>;
+  }
+
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useAtom(passwordAtom)
   const [email, setEmail] = useAtom(emailAtom);
   const [name, setName] = useAtom(nameAtom);
+
+  const handleSocialLogin = async (provider, e) => {
+    e.preventDefault();
+    try {
+      const result = await signIn(provider, {
+        redirect: false,
+        callbackUrl: "/",
+      });
+  
+      console.log(result);
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error(`Error logging in with ${provider}:`, error);
+    }
+  };
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    console.log(res);
+
+    if (res?.ok) {
+      router.push("/");
+    } else {
+      console.error("Login failed", res.error);
+    }
+  };
 
   const handleSignUpClick = () => {
     setIsRightPanelActive(true);
@@ -35,21 +72,6 @@ const Login = () => {
   const handleSignInClick = () => {
     setIsRightPanelActive(false);
   };
-
-
-   const handleLoginVerify = async (e) => {
-    e.preventDefault();
-    try {
-        const response = await doCredentailLogin(email, password);
-        if (!!response.error) {
-            console.error(response.error);
-        } else {
-            router.push('/');
-        }
-    } catch(err) {
-        console.error(err);
-    }
-  }
 
   const handleOTPVerify = async (e) => {
     e.preventDefault();
@@ -75,17 +97,6 @@ const Login = () => {
     }
   }
 
-  // Only redirect when session is successfully loaded and user is authenticated
-  useEffect(() => {
-    const redirectToHome = async () => {
-      if (status === 'authenticated') {
-        await router.push('/');
-        console.log("Redirected to the home page.");
-      }
-    };
-    redirectToHome();
-  }, [status, router]);
-
   return (
     <>
       <div className={style.body}>
@@ -94,14 +105,14 @@ const Login = () => {
             <form className={style.form} onSubmit={handleOTPVerify}>
               <h1 className={style.h1}>Create Account</h1>
               <section className={style['social-container']}>
-                <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <Image src="/facebook-icon.png" alt="fa" width={18} height={18}></Image>
+                <a href="#" className={style.social} onClick={() => handleSocialLogin('facebook')}>
+                  <Image src="/facebook-icon.png" width={18} height={18}></Image>
                 </a>
-                <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <Image src="/google-icon.png" alt="go" width={18} height={18}></Image>
+                <a href="#" className={style.social} onClick={() => handleSocialLogin('google')}>
+                  <Image src="/google-icon.png" width={18} height={18}></Image>
                 </a>
-                <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <Image src="/kakao.png" alt="ka" width={18} height={18}></Image>
+                <a href="#" className={style.social} onClick={() => handleSocialLogin('kakao')}>
+                  <Image src="/kakao.png" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your email for registration</span>
@@ -113,25 +124,28 @@ const Login = () => {
           </div>
 
           <div className={`${style['form-container']} ${style['sign-in-container']}`}>
-            <form className={style.form} onSubmit={handleLoginVerify}>
+            <div className={style.form}>
               <h1 className={style.h1}>Sign in</h1>
+              {/* Social Media Login Buttons */}
               <section className={style['social-container']}>
                 <a href="#" className={style.social} onClick={() => signIn('facebook')}>
-                  <Image src="/facebook-icon.png" alt="fa" width={18} height={18}></Image>
+                  <Image src="/facebook-icon.png" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('google')}>
-                  <Image src="/google-icon.png" alt="go" width={18} height={18}></Image>
+                  <Image src="/google-icon.png" width={18} height={18}></Image>
                 </a>
                 <a href="#" className={style.social} onClick={() => signIn('kakao')}>
-                  <Image src="/kakao.png" alt="ka" width={18} height={18}></Image>
+                  <Image src="/kakao.png" width={18} height={18}></Image>
                 </a>
               </section>
               <span className={style.span}>or use your account</span>
-              <input className={style.input} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />
-              <input className={style.input} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" />
-              <a className={style.a} href="#">Forgot your password?</a>
-              <button className={style.button}>Sign In</button>
-            </form>
+              <form onSubmit={handleEmailLogin}>
+                <input className={style.input} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />
+                <input className={style.input} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" />
+                <a className={style.a} href="#">Forgot your password?</a>
+                <button className={style.button}>Sign In</button>
+              </form>
+            </div>
           </div>
 
           <div className={style['overlay-container']}>
