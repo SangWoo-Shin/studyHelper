@@ -1,5 +1,5 @@
 import { Modal, Button, Container, Form } from 'react-bootstrap';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { setToken, setEmailLocal } from '../lib/storingUser';
 import { useAtom } from 'jotai';
 import { emailAtom, passwordAtom, nameAtom } from '../lib/atom';
@@ -12,6 +12,8 @@ const OtpVerify = ({ show, onHide }) => {
     const [name, setName] = useAtom(nameAtom);
     const [password, setPassword] = useAtom(passwordAtom);
     const [email, setEmail] = useAtom(emailAtom);
+    const [message, setMessage] = useState('');
+
     async function handleSubmit(e) {
         e.preventDefault();
         try {
@@ -37,7 +39,10 @@ const OtpVerify = ({ show, onHide }) => {
                 setEmailLocal(authData.email);
                 localStorage.setItem('userId', data.user._id);
                 if(data.exists) {
-                    router.push('/');
+                    setMessage('Authentication successful. You can now log in.');
+                }
+                else {
+                    console.log("Invalid OTP code.");
                 }
             } else {
                 alert(data.error);
@@ -53,13 +58,14 @@ const OtpVerify = ({ show, onHide }) => {
         <Modal show={show} onHide={onHide} className={style['modal-background']}>
             <Container className={style['modal-content']}>
                 <Container className={style.header}>
-                    <Button onClick={onHide} className={style.closeButton}>X</Button>
+                    <Button onClick={onHide} className={style['closeButton']}>X</Button>
                 </Container>
             <Modal.Body>
                 <p className={style.p}>Please enter the OTP sent to your email.</p>
+                {message && <p className={style.message}>{message}</p>}
                 <Form className={style.form} onSubmit={handleSubmit}>
                     <Form.Control className={style.input} placeholder='Type OTP code sent to your email' value={otp} onChange={(e) => setOtp(e.target.value)}/>
-                    <Button variant="danger" type="submit" className={style['button']}>Submit</Button> 
+                    <Button type="submit" className={style.button}>Submit</Button> 
                 </Form>                
             </Modal.Body>
             </Container>
