@@ -1,5 +1,6 @@
 import styles from '../styles/chat.module.css';
 import { useSession, signOut } from "next-auth/react";
+import LoginPage from '../pages/user/login'; 
 
 const Menu = () => {
     const { data: session, status } = useSession();
