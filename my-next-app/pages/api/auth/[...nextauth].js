@@ -3,21 +3,20 @@ import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { Next } from "react-bootstrap/esm/PageItem";
 
-const authOptions = {
+export const authOptions = {
     session: {
         strategy: 'jwt'
     },
     providers: [
         CredentialsProvider({
+            name: "Credentials",
             credentials: {
-                email: {},
-                password: {},
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                if (credentials === null) return null;
-                console.log(credentials);
-
                 const response = await fetch(process.env.NEXT_PUBLIC_BACKENDURL + '/verifyUser', {
                     method: 'POST',
                     headers: {
@@ -28,17 +27,11 @@ const authOptions = {
                         password: credentials.password
                     })
                 });
-            
-                console.log('Response status:', response.status);
-                
                 if (response.ok) {
                     const user = await response.json();
-                    console.log('User data:', user);
                     return user;
                 } else {
-                    const errorText = await response.text();
-                    console.error('Authorization failed:', errorText);
-                    throw new Error("User not found.");
+                    return null;
                 }
             }
         }),
@@ -62,19 +55,19 @@ const authOptions = {
         })
     ],
     callbacks: {
-        async redirect({ url, baseUrl }) {
-            if (url.startsWith(baseUrl)) return url;
-            return baseUrl; // Redirect to base URL for all other cases
-        },
         async jwt({ token, user }) {
             if (user) {
-              token.id = user.id;
+              token.id = user._id;
+              token.email = user.email;
+              token.name = user.name;
             }
             return token;
         },
         async session({ session, token }) {
-            if (token.id) {
+            if (token) {
                 session.user.id = token.id;
+                session.user.email = token.email;
+                session.user.name = token.name;
             }
             return session;
         },
@@ -159,5 +152,4 @@ const authOptions = {
         signOut: '/user/login', 
     },
 };
-
-export default (req, res) => NextAuth(req, res, authOptions);
+export default NextAuth(authOptions);
