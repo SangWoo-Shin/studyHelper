@@ -9,7 +9,13 @@ import { Image } from 'react-bootstrap';
 
 const Login = () => {
   const { data: session, status } = useSession(); 
+  const [isRightPanelActive, setIsRightPanelActive] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [password, setPassword] = useAtom(passwordAtom)
+  const [email, setEmail] = useAtom(emailAtom);
+  const [name, setName] = useAtom(nameAtom);
   const router = useRouter();
+
   useEffect(() => {
     if (status === "authenticated" && session?.user?.email) {
       router.replace('/');
@@ -22,12 +28,6 @@ const Login = () => {
     return <p>Redirecting...</p>;
   }
 
-  const [isRightPanelActive, setIsRightPanelActive] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [password, setPassword] = useAtom(passwordAtom)
-  const [email, setEmail] = useAtom(emailAtom);
-  const [name, setName] = useAtom(nameAtom);
-
   const handleSocialLogin = async (provider, e) => {
     e.preventDefault();
     try {
@@ -36,6 +36,7 @@ const Login = () => {
         callbackUrl: "/",
       });
   
+      console.log(result);
       if (result?.ok) {
         router.push("/");
       } else {
