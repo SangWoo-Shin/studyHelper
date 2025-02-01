@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import LoginPage from '../pages/user/login'; 
 
@@ -13,7 +13,9 @@ const RouteGuard = (props) => {
         const authCheck = (url) => {
             const path = url.split('?')[0];
             if (status === 'authenticated') {
-                router.push('/');
+                if (path === '/user/login') {
+                    router.push('/');
+                }
             } else if (status === 'unauthenticated' && !PUBLIC_PATH.includes(path)) {
                 router.push('/user/login');
             }
