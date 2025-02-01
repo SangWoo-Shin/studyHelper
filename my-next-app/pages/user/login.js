@@ -36,7 +36,6 @@ const Login = () => {
         callbackUrl: "/",
       });
   
-      console.log(result);
       if (result?.ok) {
         router.push("/");
       } else {
